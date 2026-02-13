@@ -1,4 +1,5 @@
 import Database from "better-sqlite3";
+import fs from "node:fs";
 import path from "node:path";
 
 export type Book = {
@@ -29,7 +30,19 @@ export type Book = {
   updated_at: string;
 };
 
-const DB_PATH = process.env.BOOKS_DB_PATH || path.resolve(process.cwd(), "../app/data/books.db");
+function resolveDbPath() {
+  if (process.env.BOOKS_DB_PATH) return process.env.BOOKS_DB_PATH;
+
+  const candidates = [
+    path.resolve(process.cwd(), "app/data/books.db"),
+    path.resolve(process.cwd(), "../app/data/books.db"),
+  ];
+
+  const found = candidates.find((candidate) => fs.existsSync(candidate));
+  return found || candidates[0];
+}
+
+const DB_PATH = resolveDbPath();
 
 const db = new Database(DB_PATH);
 
