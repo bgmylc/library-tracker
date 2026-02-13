@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Library Tracker</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>Library Tracker</h1>
+    <p>Single-user local app with analytics</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel" id="dashboardPanel">
+      <h2>Dashboard</h2>
+      <div class="kpis" id="kpis"></div>
+      <div class="charts">
+        <div>
+          <h3>Top Genres</h3>
+          <div id="genreChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Top Authors</h3>
+          <div id="authorChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Status Distribution</h3>
+          <div id="statusChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Top Subgenres</h3>
+          <div id="subgenreChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Average Pages by Status</h3>
+          <div id="pagesStatusChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Completion Rate by Purchase Year</h3>
+          <div id="completionYearChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Owned vs Not Owned</h3>
+          <div id="ownershipChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Fiction vs Nonfiction</h3>
+          <div id="nonfictionChart" class="bars"></div>
+        </div>
+        <div>
+          <h3>Top Publishers</h3>
+          <div id="publisherChart" class="bars"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Library</h2>
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="Search title or author" />
+        <select id="statusFilter"><option value="">All statuses</option></select>
+        <select id="genreFilter"><option value="">All genres</option></select>
+        <select id="languageFilter"><option value="">All languages</option></select>
+        <button id="refreshBtn">Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Genre</th>
+              <th>Language</th>
+              <th>Year</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="booksTbody"></tbody>
+        </table>
+      </div>
+      <p id="tableMeta" class="meta"></p>
+    </section>
+
+    <section class="panel">
+      <h2 id="formTitle">Add Book</h2>
+      <form id="bookForm" class="form-grid">
+        <label>Title <input name="title" required /></label>
+        <label>Author <input name="author" /></label>
+        <label>Status
+          <select name="status">
+            <option>Not Started</option>
+            <option>Reading</option>
+            <option>Paused</option>
+            <option>Finished</option>
+            <option>DNF</option>
+          </select>
+        </label>
+        <label>Genre <input name="genre" /></label>
+        <label>Subgenre <input name="subgenre" /></label>
+        <label>Language <input name="language" /></label>
+        <label>Pages <input name="pages" type="number" min="1" /></label>
+        <label>Purchase Year <input name="purchase_year" type="number" min="0" /></label>
+        <label>Publisher <input name="publisher" /></label>
+        <label>Purchase Location <input name="purchase_location" /></label>
+        <label>Rating (1-5) <input name="rating" type="number" min="1" max="5" /></label>
+        <label>Owned
+          <select name="is_owned">
+            <option value="">Unknown</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>Nonfiction
+          <select name="is_nonfiction">
+            <option value="">Unknown</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label class="full">Notes <textarea name="notes" rows="3"></textarea></label>
+        <div class="actions full">
+          <button type="submit" id="submitBtn">Add Book</button>
+          <button type="button" id="cancelEditBtn" hidden>Cancel Edit</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Import CSV</h2>
+      <p>Import and replace current DB from a CSV file path.</p>
+      <div class="toolbar">
+        <input id="csvPath" value="/Users/begumyolcu/Documents/New project/lib_updated.csv" />
+        <button id="importBtn">Import</button>
+      </div>
+      <p class="meta" id="importMeta"></p>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
