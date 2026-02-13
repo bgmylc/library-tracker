@@ -13,14 +13,14 @@ Local-first book management app with analytics, built from your CSV library.
 
 Both apps use the SQLite database at:
 
-- `/Users/begumyolcu/Documents/New project/app/data/books.db`
+- `app/data/books.db`
 
 The Python app can bootstrap from `lib_updated.csv` when DB is empty.
 
 ## Run Option 1: Python Local App
 
 ```bash
-cd "/Users/begumyolcu/Documents/New project"
+cd "<repo-root>"
 python3 app/server.py
 ```
 
@@ -29,7 +29,7 @@ Open: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 ## Run Option 2: Next.js App
 
 ```bash
-cd "/Users/begumyolcu/Documents/New project/web"
+cd "<repo-root>/web"
 export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 npm install
 npm run dev
