@@ -12,13 +12,13 @@ Next.js replacement for the local library app.
 ## Prerequisites
 
 - Node.js installed (Homebrew path may be needed):
-  - `export PATH="/opt/homebrew/Cellar/node/25.6.1/bin:$PATH"`
+  - `export PATH="/opt/homebrew/opt/node@22/bin:$PATH"`
 
 ## Run
 
 ```bash
 cd "/Users/begumyolcu/Documents/New project/web"
-export PATH="/opt/homebrew/Cellar/node/25.6.1/bin:$PATH"
+export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 export npm_config_cache="$PWD/.npm-cache"
 npm install
 npm run dev
@@ -27,6 +27,14 @@ npm run dev
 Open: [http://127.0.0.1:3000](http://127.0.0.1:3000)
 
 If `npm install` fails with `ENOTFOUND registry.npmjs.org`, network DNS access to npm is blocked in the current environment. Run the same commands on a network where npm registry is reachable.
+
+## Stability helpers
+
+- Clean restart when hot-reload gets stuck:
+  - `npm run dev:reset`
+- Rebuild SQLite native module after Node changes:
+  - `npm run rebuild:sqlite`
+- Node version is checked automatically before `dev` and `build`.
 
 ## Optional DB override
 
