@@ -280,7 +280,59 @@ h1, h2, h3, h4 {
   background: rgba(255,255,255,.76);
 }
 .fgForm label span { font-size: 12px; color: var(--muted); font-weight: 600; }
+.fgFieldLabel { display: inline-block; margin-bottom: 6px; font-size: 12px; color: var(--muted); font-weight: 600; }
 .fgWide { grid-column: 1 / -1; }
+.fgAddWrap {
+  max-width: 980px;
+  margin: 0 auto;
+}
+.fgAddCard {
+  border-radius: 30px;
+  padding: 26px 28px;
+}
+.fgFormHeader {
+  margin-bottom: 14px;
+}
+.fgFormHeader h2 {
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.fgFormHeader p {
+  color: #525252;
+  font-size: 18px;
+}
+.fgSubTitle {
+  font-size: 20px;
+  margin: 2px 0;
+}
+.fgSectionDivider {
+  border-top: 1px solid rgba(163, 163, 163, 0.25);
+  margin-top: 4px;
+}
+.fgAddGrid2 { grid-template-columns: 1fr 1fr; }
+.fgAddGrid3 { grid-template-columns: 1fr 1fr 1fr; }
+.fgStars {
+  display: flex;
+  gap: 10px;
+}
+.fgStarBtn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #facc15;
+  cursor: pointer;
+}
+.fgStarBtn svg {
+  width: 36px;
+  height: 36px;
+}
+.fgStarBtn:not(.isActive) {
+  color: #fcd34d;
+}
+.fgFormActions {
+  justify-content: flex-end;
+}
 .fgTextToggle {
   border: 0;
   background: transparent;
@@ -318,15 +370,387 @@ h1, h2, h3, h4 {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.fgToastStack {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 120;
+  display: grid;
+  gap: 10px;
+  max-width: 380px;
+}
+.fgToast {
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  box-shadow: 0 10px 18px rgba(47, 28, 84, 0.2);
+  backdrop-filter: blur(8px);
+  display: grid;
+  grid-template-columns: 36px 1fr 22px;
+  gap: 10px;
+  align-items: flex-start;
+}
+.fgToastBody h4 {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.fgToastBody p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #525252;
+}
+.fgToastIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.fgToastIcon svg {
+  width: 18px;
+  height: 18px;
+}
+.fgToastClose {
+  border: 0;
+  background: transparent;
+  color: #737373;
+  width: 22px;
+  height: 22px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.fgToastClose svg {
+  width: 14px;
+  height: 14px;
+}
+.fgToastClose:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+.fgToast-success {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.15), rgba(255, 255, 255, 0.92));
+}
+.fgToast-success .fgToastIcon {
+  color: #6d28d9;
+  background: rgba(139, 92, 246, 0.2);
+}
+.fgToast-info {
+  border-color: rgba(56, 189, 248, 0.28);
+  background: linear-gradient(145deg, rgba(56, 189, 248, 0.14), rgba(255, 255, 255, 0.92));
+}
+.fgToast-info .fgToastIcon {
+  color: #0c4a6e;
+  background: rgba(56, 189, 248, 0.2);
+}
+.fgToast-warning {
+  border-color: rgba(251, 113, 133, 0.32);
+  background: linear-gradient(145deg, rgba(251, 113, 133, 0.15), rgba(255, 255, 255, 0.92));
+}
+.fgToast-warning .fgToastIcon {
+  color: #be123c;
+  background: rgba(251, 113, 133, 0.2);
+}
+.fgToast-error {
+  border-color: rgba(248, 113, 113, 0.36);
+  background: rgba(254, 242, 242, 0.96);
+}
+.fgToast-error .fgToastIcon {
+  color: #b91c1c;
+  background: rgba(254, 226, 226, 0.95);
+}
+.fgPanel {
+  border-radius: 30px;
+  padding: 26px 28px;
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 24px rgba(139, 92, 246, 0.08);
+}
+.fgHomeScreen .fgHeader h2,
+.fgLibraryPanel h2,
+.fgPanel .fgHeader h2 {
+  font-size: clamp(42px, 4.8vw, 56px);
+  line-height: 1.02;
+}
+.fgMetricRow {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 16px;
+}
+.fgMetricCard {
+  border-radius: 28px;
+  padding: 18px 24px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(255, 255, 255, 0.75);
+  display: grid;
+  gap: 6px;
+}
+.fgMetricCard p {
+  margin: 0;
+  color: #444;
+  font-size: 16px;
+}
+.fgMetricCard strong {
+  font-size: 52px;
+  line-height: 1;
+}
+.fgMetricCard.isSky { background: rgba(56, 189, 248, 0.16); border-color: rgba(56, 189, 248, 0.24); }
+.fgMetricCard.isViolet { background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.24); }
+.fgMetricCard.isCoral { background: rgba(251, 113, 133, 0.15); border-color: rgba(251, 113, 133, 0.24); }
+.fgMetricCard.isMagenta { background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.24); }
+.fgHomeReadingCard {
+  margin-top: 14px;
+  border-radius: 26px;
+}
+.fgReadingRow {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+.fgReadingRow h4 {
+  margin: 0;
+  font-size: 24px;
+}
+.fgReadingRow p {
+  margin: 2px 0 8px;
+  color: #555;
+}
+.fgInlineProgress {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.fgInlineProgress span {
+  color: #555;
+  font-size: 20px;
+}
+.fgHomeActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+.fgGoalCard {
+  margin-top: 12px;
+  border-radius: 28px;
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  background: rgba(139, 92, 246, 0.17);
+  padding: 18px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.fgGoalCard h3 {
+  font-size: 36px;
+}
+.fgGoalCard p {
+  color: #555;
+  margin: 3px 0 0;
+}
+.fgGoalCard strong {
+  font-size: 48px;
+}
+.fgGoalProgress {
+  grid-column: 1 / -1;
+}
+.fgLibHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.fgLibHeader p {
+  margin-top: 4px;
+  color: #555;
+}
+.fgLibSearch {
+  margin-top: 14px;
+}
+.fgLibMetaControls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.fgLibMetaControls select {
+  border: 1px solid rgba(139,92,246,.18);
+  background: rgba(255,255,255,.8);
+  border-radius: 12px;
+  min-height: 44px;
+  padding: 0 12px;
+  font: inherit;
+  color: #262626;
+}
+.fgLibraryBookCard {
+  border-radius: 30px;
+  padding: 18px;
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 18px rgba(139, 92, 246, 0.08);
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 14px;
+}
+.fgBookCoverLg {
+  width: 72px;
+  height: 106px;
+  border-radius: 16px;
+}
+.fgLibraryBookMain h3 {
+  font-size: 44px;
+  line-height: 1.02;
+}
+.fgLibraryBookMain p {
+  margin: 4px 0 0;
+  color: #555;
+}
+.fgLibraryRowTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.fgLibraryActions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.fgReadingProgressBlock {
+  margin-top: 8px;
+}
+.fgReadingProgressBlock div {
+  display: flex;
+  justify-content: space-between;
+  color: #555;
+  margin-bottom: 4px;
+}
+.fgTrend {
+  font-size: 12px;
+  font-weight: 700;
+  justify-self: end;
+}
+.fgTrend.isUp { color: #16a34a; }
+.fgTrend.isDown { color: #dc2626; }
+.fgChartCard {
+  margin-top: 14px;
+  border-radius: 26px;
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  background: rgba(255, 255, 255, 0.74);
+  padding: 20px;
+}
+.fgChartCard h3 {
+  font-size: 40px;
+}
+.fgChartCard > p {
+  margin: 2px 0 14px;
+  color: #555;
+}
+.fgSimpleBars {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  align-items: end;
+  gap: 10px;
+  min-height: 220px;
+}
+.fgSimpleBarItem {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+.fgSimpleBar {
+  width: 100%;
+  border-radius: 12px 12px 6px 6px;
+  background: linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%);
+}
+.fgSimpleBarItem span {
+  color: #666;
+  font-size: 12px;
+}
+.fgSimpleLineWrap {
+  height: 250px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+.fgSimpleLine {
+  width: 100%;
+  height: 100%;
+  color: #7c3aed;
+}
+.fgSimpleLineLabels {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-top: 6px;
+}
+.fgSimpleLineLabels span {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+.fgAuthorRow {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.fgAuthorBadge {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.2);
+  color: #6d28d9;
+  font-weight: 700;
+}
+.fgAuthorRow span {
+  color: #666;
+}
+.fgSplit {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.fgReadingWindow {
+  color: #555;
+}
+.fgReadingWindow strong {
+  color: #1f2937;
+}
 
 @media (max-width: 900px) {
   .fgGrid-4,
   .fgGrid-2,
   .fgFilterRow { grid-template-columns: 1fr; }
+  .fgMetricRow,
+  .fgHomeActions,
+  .fgSimpleBars,
+  .fgLibMetaControls { grid-template-columns: 1fr; }
+  .fgLibraryBookCard { grid-template-columns: 1fr; }
+  .fgLibraryActions { flex-wrap: wrap; }
+  .fgLibraryBookMain h3,
+  .fgChartCard h3,
+  .fgGoalCard h3 { font-size: 32px; }
+  .fgMetricCard strong,
+  .fgGoalCard strong { font-size: 36px; }
+  .fgHomeScreen .fgHeader h2,
+  .fgLibraryPanel h2,
+  .fgPanel .fgHeader h2 { font-size: 40px; }
+  .fgAddGrid2,
+  .fgAddGrid3 { grid-template-columns: 1fr; }
+  .fgFormHeader h2 { font-size: 42px; }
+  .fgFormHeader p { font-size: 20px; }
 }
 
 @media (max-width: 760px) {
-  .siteHeader { align-items: start; flex-direction: column; }
+  .siteHeader { align-items: flex-start; flex-direction: column; }
   .shellMain { padding: 14px 12px 20px; }
   .fgGlass { padding: 14px; }
   .fgBtn { width: 100%; }
