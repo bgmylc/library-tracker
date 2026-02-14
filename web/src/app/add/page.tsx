@@ -1,8 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { fetchJson } from "@/lib/http";
+import { Button, GlassCard } from "@/components/ui/figma";
 
 type FormState = {
   title: string;
@@ -50,28 +51,14 @@ function AddPageInner() {
   const editId = params.get("id");
 
   const [form, setForm] = useState<FormState>(emptyForm);
-  const [showAdvancedForm, setShowAdvancedForm] = useState(Boolean(editId));
+  const [showAdvanced, setShowAdvanced] = useState(Boolean(editId));
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-    const res = await fetch(url, { ...init, headers: { "Content-Type": "application/json" } });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Request failed");
-    return data as T;
-  }
 
   useEffect(() => {
-    async function loadEditBook() {
-      if (!editId) {
-        setForm(emptyForm);
-        return;
-      }
-      setLoading(true);
-      setError("");
-      try {
-        const book = await fetchJson<any>(`/api/books/${editId}`);
+    if (!editId) return;
+    fetchJson<any>(`/api/books/${editId}`)
+      .then((book) => {
         setForm({
           title: book.title || "",
           author: book.author || "",
@@ -88,14 +75,8 @@ function AddPageInner() {
           is_owned: book.is_owned === 1 ? "true" : book.is_owned === 0 ? "false" : "",
           is_nonfiction: book.is_nonfiction === 1 ? "true" : book.is_nonfiction === 0 ? "false" : "",
         });
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load book");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadEditBook();
+      })
+      .catch((e) => setError(e instanceof Error ? e.message : "Failed"));
   }, [editId]);
 
   async function onSubmit(e: FormEvent) {
@@ -111,10 +92,10 @@ function AddPageInner() {
 
     try {
       if (editId) {
-        await fetchJson(`/api/books/${editId}`, { method: "PUT", body: JSON.stringify(payload) });
+        await fetchJson(`/api/books/${editId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         setMessage("Book updated.");
       } else {
-        await fetchJson("/api/books", { method: "POST", body: JSON.stringify(payload) });
+        await fetchJson("/api/books", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         setMessage("Book added.");
         setForm(emptyForm);
       }
@@ -124,101 +105,54 @@ function AddPageInner() {
   }
 
   return (
-    <section id="book-form" className="panel">
-      <div className="sectionHead">
-        <h2>{editId ? "Edit Book" : "Quick Add"}</h2>
-        <p className="meta">Enter essentials first, expand for details when needed.</p>
-      </div>
+    <div className="fgScreen fgFormScreen">
+      <header className="fgHeader">
+        <h2>{editId ? "Edit Book" : "Add Book"}</h2>
+        <p>Add a new book to your library</p>
+      </header>
 
-      {loading ? <p className="meta">Loading...</p> : null}
+      <GlassCard>
+        <form className="fgForm" onSubmit={onSubmit}>
+          <label><span>Title *</span><input required value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} /></label>
+          <label><span>Author</span><input value={form.author} onChange={(e) => setForm((f) => ({ ...f, author: e.target.value }))} /></label>
+          <div className="fgGrid fgGrid-2">
+            <label><span>Status</span><select value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}><option>Not Started</option><option>Reading</option><option>Paused</option><option>Finished</option><option>DNF</option></select></label>
+            <label><span>Genre</span><input value={form.genre} onChange={(e) => setForm((f) => ({ ...f, genre: e.target.value }))} /></label>
+          </div>
 
-      <form className="formGrid" onSubmit={onSubmit}>
-        <label className="label full">Title
-          <input required value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
-        </label>
-        <label className="label">Author
-          <input value={form.author} onChange={(e) => setForm((f) => ({ ...f, author: e.target.value }))} />
-        </label>
-        <label className="label">Status
-          <select value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}>
-            <option>Not Started</option>
-            <option>Reading</option>
-            <option>Paused</option>
-            <option>Finished</option>
-            <option>DNF</option>
-          </select>
-        </label>
-
-        <div className="full">
-          <button type="button" className="ghostBtn" onClick={() => setShowAdvancedForm((x) => !x)}>
-            {showAdvancedForm ? "Hide Details" : "Add Details"}
+          <button type="button" className="fgTextToggle" onClick={() => setShowAdvanced((x) => !x)}>
+            {showAdvanced ? "Hide advanced fields" : "Show advanced fields"}
           </button>
-        </div>
 
-        {showAdvancedForm ? (
-          <>
-            <label className="label">Genre
-              <input value={form.genre} onChange={(e) => setForm((f) => ({ ...f, genre: e.target.value }))} />
-            </label>
-            <label className="label">Subgenre
-              <input value={form.subgenre} onChange={(e) => setForm((f) => ({ ...f, subgenre: e.target.value }))} />
-            </label>
-            <label className="label">Language
-              <input value={form.language} onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))} />
-            </label>
-            <label className="label">Pages
-              <input type="number" min={1} value={form.pages} onChange={(e) => setForm((f) => ({ ...f, pages: e.target.value }))} />
-            </label>
-            <label className="label">Purchase Year
-              <input type="number" value={form.purchase_year} onChange={(e) => setForm((f) => ({ ...f, purchase_year: e.target.value }))} />
-            </label>
-            <label className="label">Publisher
-              <input value={form.publisher} onChange={(e) => setForm((f) => ({ ...f, publisher: e.target.value }))} />
-            </label>
-            <label className="label">Purchase Location
-              <input value={form.purchase_location} onChange={(e) => setForm((f) => ({ ...f, purchase_location: e.target.value }))} />
-            </label>
-            <label className="label">Rating
-              <input type="number" min={1} max={5} value={form.rating} onChange={(e) => setForm((f) => ({ ...f, rating: e.target.value }))} />
-            </label>
-            <label className="label">Owned
-              <select value={form.is_owned} onChange={(e) => setForm((f) => ({ ...f, is_owned: e.target.value as "" | "true" | "false" }))}>
-                <option value="">Unknown</option>
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
-            </label>
-            <label className="label">Nonfiction
-              <select value={form.is_nonfiction} onChange={(e) => setForm((f) => ({ ...f, is_nonfiction: e.target.value as "" | "true" | "false" }))}>
-                <option value="">Unknown</option>
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
-            </label>
-            <label className="label full">Notes
-              <textarea rows={3} value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} />
-            </label>
-          </>
-        ) : null}
-
-        <div className="actions full">
-          <button type="submit">{editId ? "Save Changes" : "Add Book"}</button>
-          {editId ? (
-            <button type="button" className="ghostBtn" onClick={() => router.push("/add")}>New Entry</button>
+          {showAdvanced ? (
+            <div className="fgGrid fgGrid-2">
+              <label><span>Subgenre</span><input value={form.subgenre} onChange={(e) => setForm((f) => ({ ...f, subgenre: e.target.value }))} /></label>
+              <label><span>Language</span><input value={form.language} onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))} /></label>
+              <label><span>Pages</span><input type="number" min={1} value={form.pages} onChange={(e) => setForm((f) => ({ ...f, pages: e.target.value }))} /></label>
+              <label><span>Publication Year</span><input type="number" value={form.purchase_year} onChange={(e) => setForm((f) => ({ ...f, purchase_year: e.target.value }))} /></label>
+              <label><span>Publisher</span><input value={form.publisher} onChange={(e) => setForm((f) => ({ ...f, publisher: e.target.value }))} /></label>
+              <label><span>Purchase Location</span><input value={form.purchase_location} onChange={(e) => setForm((f) => ({ ...f, purchase_location: e.target.value }))} /></label>
+              <label><span>Rating</span><input type="number" min={1} max={5} value={form.rating} onChange={(e) => setForm((f) => ({ ...f, rating: e.target.value }))} /></label>
+              <label><span>Owned</span><select value={form.is_owned} onChange={(e) => setForm((f) => ({ ...f, is_owned: e.target.value as "" | "true" | "false" }))}><option value="">Unknown</option><option value="true">Yes</option><option value="false">No</option></select></label>
+              <label><span>Nonfiction</span><select value={form.is_nonfiction} onChange={(e) => setForm((f) => ({ ...f, is_nonfiction: e.target.value as "" | "true" | "false" }))}><option value="">Unknown</option><option value="true">Yes</option><option value="false">No</option></select></label>
+              <label className="fgWide"><span>Notes</span><textarea rows={4} value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} /></label>
+            </div>
           ) : null}
-        </div>
-      </form>
 
-      {message ? <p className="meta">{message}</p> : null}
-      {error ? <p className="meta">Error: {error}</p> : null}
-    </section>
+          <div className="fgActions">
+            <Button variant="ghost" type="button">Cancel</Button>
+            <Button type="submit">{editId ? "Save Changes" : "Add to Library"}</Button>
+            {editId ? <Button variant="secondary" type="button" onClick={() => router.push("/add")}>New Entry</Button> : null}
+          </div>
+        </form>
+      </GlassCard>
+
+      {message ? <p className="fgOk">{message}</p> : null}
+      {error ? <p className="fgError">Error: {error}</p> : null}
+    </div>
   );
 }
 
 export default function AddPage() {
-  return (
-    <Suspense fallback={<section id="book-form" className="panel"><p className="meta">Loading...</p></section>}>
-      <AddPageInner />
-    </Suspense>
-  );
+  return <Suspense fallback={<div className="fgScreen"><p>Loading...</p></div>}><AddPageInner /></Suspense>;
 }
