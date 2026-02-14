@@ -73,6 +73,8 @@ export function BookCard({
   author,
   status,
   genre,
+  purchaseYear,
+  isOwned,
   progress,
   onEdit,
   onDelete,
@@ -81,6 +83,8 @@ export function BookCard({
   author: string;
   status: string;
   genre?: string;
+  purchaseYear?: number | null;
+  isOwned?: number | null;
   progress?: number;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -114,6 +118,9 @@ export function BookCard({
         <div className="fgBookMeta">
           <StatusBadge status={status} />
           {genre ? <span className="fgGenre">{genre}</span> : null}
+          {purchaseYear ? <span className="fgGenre">Bought {purchaseYear}</span> : null}
+          {isOwned === 1 ? <span className="fgGenre">At home</span> : null}
+          {isOwned === 0 ? <span className="fgGenre">Storage box</span> : null}
         </div>
         {typeof progress === "number" && status === "Reading" ? (
           <div className="fgBookProgress">

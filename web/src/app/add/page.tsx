@@ -35,7 +35,7 @@ const emptyForm: FormState = {
   purchase_location: "",
   rating: "",
   notes: "",
-  is_owned: "",
+  is_owned: "true",
   is_nonfiction: "",
 };
 
@@ -129,11 +129,11 @@ function AddPageInner() {
               <label><span>Subgenre</span><input value={form.subgenre} onChange={(e) => setForm((f) => ({ ...f, subgenre: e.target.value }))} /></label>
               <label><span>Language</span><input value={form.language} onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))} /></label>
               <label><span>Pages</span><input type="number" min={1} value={form.pages} onChange={(e) => setForm((f) => ({ ...f, pages: e.target.value }))} /></label>
-              <label><span>Publication Year</span><input type="number" value={form.purchase_year} onChange={(e) => setForm((f) => ({ ...f, purchase_year: e.target.value }))} /></label>
+              <label><span>Purchase Year</span><input type="number" value={form.purchase_year} onChange={(e) => setForm((f) => ({ ...f, purchase_year: e.target.value }))} /></label>
               <label><span>Publisher</span><input value={form.publisher} onChange={(e) => setForm((f) => ({ ...f, publisher: e.target.value }))} /></label>
               <label><span>Purchase Location</span><input value={form.purchase_location} onChange={(e) => setForm((f) => ({ ...f, purchase_location: e.target.value }))} /></label>
               <label><span>Rating</span><input type="number" min={1} max={5} value={form.rating} onChange={(e) => setForm((f) => ({ ...f, rating: e.target.value }))} /></label>
-              <label><span>Owned</span><select value={form.is_owned} onChange={(e) => setForm((f) => ({ ...f, is_owned: e.target.value as "" | "true" | "false" }))}><option value="">Unknown</option><option value="true">Yes</option><option value="false">No</option></select></label>
+              <label><span>Storage Location</span><select value={form.is_owned} onChange={(e) => setForm((f) => ({ ...f, is_owned: e.target.value as "" | "true" | "false" }))}><option value="true">At home</option><option value="false">Storage box</option></select></label>
               <label><span>Nonfiction</span><select value={form.is_nonfiction} onChange={(e) => setForm((f) => ({ ...f, is_nonfiction: e.target.value as "" | "true" | "false" }))}><option value="">Unknown</option><option value="true">Yes</option><option value="false">No</option></select></label>
               <label className="fgWide"><span>Notes</span><textarea rows={4} value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} /></label>
             </div>

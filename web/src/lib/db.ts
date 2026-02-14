@@ -130,6 +130,8 @@ export function listBooks(params: {
   status?: string;
   genre?: string;
   language?: string;
+  purchase_year?: string | number | null;
+  starts_with?: string | null;
   sort?: string;
   order?: "asc" | "desc";
   page?: number;
@@ -139,6 +141,8 @@ export function listBooks(params: {
   const status = (params.status ?? "").trim();
   const genre = (params.genre ?? "").trim();
   const language = (params.language ?? "").trim();
+  const purchaseYear = parseIntOrNull(params.purchase_year);
+  const startsWith = String(params.starts_with ?? "").trim().toUpperCase();
   const page = Math.max(1, Number(params.page ?? 1));
   const pageSize = Math.max(1, Math.min(200, Number(params.page_size ?? 50)));
 
@@ -172,6 +176,18 @@ export function listBooks(params: {
   if (language) {
     where.push("language = ?");
     args.push(language);
+  }
+  if (purchaseYear !== null) {
+    where.push("purchase_year = ?");
+    args.push(purchaseYear);
+  }
+  if (startsWith) {
+    if (startsWith === "#") {
+      where.push("title GLOB '[0-9]*'");
+    } else {
+      where.push("UPPER(title) LIKE ?");
+      args.push(`${startsWith}%`);
+    }
   }
 
   const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
@@ -242,10 +258,14 @@ export function getFilters() {
   const statuses = db.prepare("SELECT DISTINCT status FROM books WHERE status IS NOT NULL AND status != '' ORDER BY status").all() as { status: string }[];
   const genres = db.prepare("SELECT DISTINCT genre FROM books WHERE genre IS NOT NULL AND genre != '' ORDER BY genre").all() as { genre: string }[];
   const languages = db.prepare("SELECT DISTINCT language FROM books WHERE language IS NOT NULL AND language != '' ORDER BY language").all() as { language: string }[];
+  const purchaseYears = db
+    .prepare("SELECT DISTINCT purchase_year FROM books WHERE purchase_year IS NOT NULL ORDER BY purchase_year DESC")
+    .all() as { purchase_year: number }[];
   return {
     statuses: statuses.map((x) => x.status),
     genres: genres.map((x) => x.genre),
     languages: languages.map((x) => x.language),
+    purchase_years: purchaseYears.map((x) => x.purchase_year),
   };
 }
 
@@ -278,7 +298,7 @@ export function getDashboard() {
     top_subgenres: query("SELECT subgenre AS label, COUNT(*) AS value FROM books WHERE subgenre IS NOT NULL AND subgenre != '' GROUP BY subgenre ORDER BY value DESC, label ASC LIMIT 12"),
     pages_by_status: query("SELECT status AS label, ROUND(AVG(pages), 1) AS value FROM books WHERE pages IS NOT NULL AND status IS NOT NULL AND status != '' GROUP BY status ORDER BY value DESC, label ASC"),
     completed_by_year: query("SELECT purchase_year AS label, ROUND((SUM(CASE WHEN status='Finished' THEN 1 ELSE 0 END) * 100.0) / COUNT(*), 2) AS value FROM books WHERE purchase_year IS NOT NULL GROUP BY purchase_year ORDER BY purchase_year ASC"),
-    ownership_split: query("SELECT CASE WHEN is_owned=1 THEN 'Owned' WHEN is_owned=0 THEN 'Not Owned' ELSE 'Unknown' END AS label, COUNT(*) AS value FROM books GROUP BY label ORDER BY value DESC, label ASC"),
+    ownership_split: query("SELECT CASE WHEN is_owned=1 THEN 'At Home' WHEN is_owned=0 THEN 'Storage' ELSE 'Unknown' END AS label, COUNT(*) AS value FROM books GROUP BY label ORDER BY value DESC, label ASC"),
     nonfiction_split: query("SELECT CASE WHEN is_nonfiction=1 THEN 'Nonfiction' WHEN is_nonfiction=0 THEN 'Fiction' ELSE 'Unknown' END AS label, COUNT(*) AS value FROM books GROUP BY label ORDER BY value DESC, label ASC"),
     top_publishers: query("SELECT publisher AS label, COUNT(*) AS value FROM books WHERE publisher IS NOT NULL AND publisher != '' GROUP BY publisher ORDER BY value DESC, label ASC LIMIT 10"),
   };

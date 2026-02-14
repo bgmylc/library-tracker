@@ -182,7 +182,29 @@ h1, h2, h3, h4 {
 }
 .fgChip.isActive { background: rgba(139,92,246,.2); color: var(--violet-dark); border-color: rgba(139,92,246,.35); }
 .fgChip em { font-style: normal; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: rgba(139,92,246,.1); }
-.fgFilterRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fgLetterRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.fgLetterChip {
+  min-width: 30px;
+  height: 30px;
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b5563;
+  cursor: pointer;
+}
+.fgLetterChip.isActive {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.38);
+  color: var(--violet-dark);
+}
+.fgFilterRow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .fgFilterRow select {
   border: 1px solid rgba(139,92,246,.18);
   background: rgba(255,255,255,.8);
@@ -275,6 +297,27 @@ h1, h2, h3, h4 {
 .fgGoalText { margin-bottom: 8px; font-size: 30px; font-weight: 700; }
 .fgBarRow { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
 .fgBarRow p { margin: 0 0 4px; color: var(--muted); font-size: 14px; }
+.fgPagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.fgPageActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.fgPageLabel {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.fgBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 @media (max-width: 900px) {
   .fgGrid-4,

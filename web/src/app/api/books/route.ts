@@ -8,6 +8,8 @@ export function GET(request: NextRequest) {
     status: searchParams.get("status") ?? "",
     genre: searchParams.get("genre") ?? "",
     language: searchParams.get("language") ?? "",
+    purchase_year: searchParams.get("purchase_year"),
+    starts_with: searchParams.get("starts_with"),
     sort: searchParams.get("sort") ?? "title",
     order: (searchParams.get("order") as "asc" | "desc") ?? "asc",
     page: Number(searchParams.get("page") ?? "1"),
