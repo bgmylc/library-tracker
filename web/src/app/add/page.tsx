@@ -94,6 +94,7 @@ function AddPageInner() {
       if (editId) {
         await fetchJson(`/api/books/${editId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         setMessage("Book updated.");
+        window.alert("Book updated successfully.");
       } else {
         await fetchJson("/api/books", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
         setMessage("Book added.");
@@ -140,7 +141,7 @@ function AddPageInner() {
           ) : null}
 
           <div className="fgActions">
-            <Button variant="ghost" type="button">Cancel</Button>
+            <Button variant="ghost" type="button" onClick={() => router.back()}>Cancel</Button>
             <Button type="submit">{editId ? "Save Changes" : "Add to Library"}</Button>
             {editId ? <Button variant="secondary" type="button" onClick={() => router.push("/add")}>New Entry</Button> : null}
           </div>
